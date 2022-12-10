@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>微博发布案例</title>
+    <style>
+        .body,*{margin: 0;padding: 0;}
+        .w{
+            width: 50%;
+            margin: auto;
+
+        }
+        .useCount{
+            color: red;           
+        }
+        #send{
+                   
+            background-color: blue;
+            border: antiquewhite;
+            width: 50px;
+            height: 20px;
+            
+        }
+        .top{
+            color: cadetblue;
+            margin-top: 50px;
+            
+        }
+        .buttom{
+            margin-left: 450px;
+        }
+        .info img{width: 100px;height: 100px;border-radius: 50%;float: left;}
+        .info{margin-left: 0;width: 50%;padding-bottom: 20px;}
+        .the-del{float: right;font-size: 35px;margin-right: 65px;color: black;text-decoration: none;}
+        .uesrname{font-size: 20px;
+        font-weight: 800;margin-left: 10px;}
+        .send-time{padding-top: 5px;color: gray;
+            font-size: 12px;}
+        .content{margin-left: 10px;}
+    </style>
+</head>
+<body>
+    <div class="w">
+        <div class="controls">
+            <div class="top">有什么新鲜事告诉大家?</div><br>
+            <textarea name="" id="area" placeholder="说点什么吧" cols="80" rows="10" maxlength="200"></textarea>
+            <div class="buttom">
+                <span class="useCount">0</span>
+                <span>/200</span>
+                <button id="send">发布</button>
+            </div>
+        </div>
+        <div class="contentList">
+            <ul id="list">
+
+            </ul>
+        </div>
+    </div>
+
+    <li hidden >
+        <div class="info">
+            <img src="./image/头像.jpg" alt="" class="userpic"><br>
+            <span class="uesrname">死数据：百里守约</span>
+            <p class="send-time">死数据：发布于2022年12月05日 00：07：54</p>
+        </div>
+        <div class="content">死数据：111</div>
+        <a href="" class="the-del"></a>
+    </li>
+
+    <script>
+
+        //需求1：检测用户输入数字字数
+        //1 组测input事件
+        //2将文本的内容长度赋值给对应的数值
+        //3表单的maxhength可以限制字数
+        let area = document.querySelector('#area')
+        let useCount = document.querySelector('.useCount')
+        let send = document.querySelector('#send')
+        let ul = document.querySelector('#list')
+
+        area.addEventListener('input', function(){
+              useCount.innerHTML = area.value.length
+        })
+        //需求2：输入不能为空
+        //判断如果内容为空，则提示不能输入为空，并且直接return，不能为空
+        //防止输入无意义空格，使用字符串.trim(),去掉首位空格
+        //并将表单的value值设置为空字符串
+        //同时下面红色设置为0
+        send.addEventListener('click', function(){
+            if(area.value.trim() === ''){
+                area.value =''
+                useCount.innerHTML = 0
+                return alert('内容不能为空')
+            }
+            //需求3：新增留言 
+            //创建一个小li，然后通过innerHTML往里面追加数据
+            //利用事件对象将时间动态化
+            //追加给ul
+            let li = document.createElement('li')
+            li.style.marginTop= '50px'
+            li.innerHTML =`
+                <div class="info">
+                 <img src="./image/头像.jpg" alt="" class="userpic">
+                 <span class="uesrname">冬冬</span>
+                 <div class="send-time">${new Date().toLocaleString()}</div>
+                </div>
+                <div class="content">${area.value}</div>
+                <a href="" class="the-del">x</a>
+
+               
+            `
+                        //需求5：删除留言 放到追加前面
+            //在事件处理函数里面获取点击按钮，注册点击事件
+            //删除对应的元素
+            //放到追加之前，这样创建的时候就绑定了事件
+            let del = li.querySelector('.the-del')
+            del.addEventListener('click',function(){
+                ul.removeChild(li)
+            })
+
+            ul.insertBefore(li,ul.children[0])
+            //需求4：重置
+            //将表单内容区域重置为空
+            //将userCount里面的内容重置为0
+            area.value =''
+            useCount.innerHTML = 0
+
+        })
+
+    </script>
+</body>
+</html>
